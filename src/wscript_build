@@ -1,0 +1,8 @@
+#!/usr/bin/env python
+# encoding: utf-8
+# Steve Beaulac, 2013 (SjB)
+
+bld.shlib(
+	source = 'hid-cli.c',
+	target = 'hid-cli',
+	vnum = bld.env.Version)

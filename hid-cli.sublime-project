@@ -1,0 +1,27 @@
+{
+	"folders":
+	[
+		{
+			"follow_symlinks": true,
+			"path": "/home/steve/Projects/cscode/src/github.com/SjB/hid-cli"
+		},
+		{
+			"follow_symlinks": true,
+			"path": "/home/steve/Projects/nca.uwo.ca/cavra-attenuator"
+		},
+		{
+			"follow_symlinks": true,
+			"path": "/home/steve/Projects/cscode/src/github.com/SjB/CavraControl"
+		}
+	],
+	"settings":
+	{
+		"completesharp_assemblies":
+		[
+			"${project_path:build/*.dll}",
+			"${project_path:build/**/*.dll}",
+			"/usr/lib/cli/**/*.dll",
+			"/home/steve/Projects/cscode/pkgs/lib/**/*.dll"
+		]
+	}
+}

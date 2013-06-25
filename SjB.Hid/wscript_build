@@ -1,0 +1,15 @@
+#!/usr/bin/env python
+# encoding: utf-8
+# Copyright (c) 2012 SjB <steve@sagacity.ca>. All Rights Reserved.
+
+dll_name = 'SjB.Hid'
+
+srcs = ['HidDevice.cs']
+
+bld(
+    features = 'cs cs_dev',
+    source = srcs,
+    install_path = bld.env.default_app_install_path,
+    gen = '{0}.dll'.format(dll_name),
+    type = 'library',
+    name = dll_name);
