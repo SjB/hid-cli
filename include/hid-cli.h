@@ -4,20 +4,40 @@
 // that uses this DLL. This way any other project whose source files include this file see
 // HIDCLI_API functions as being imported from a DLL, whereas this DLL sees symbols
 // defined with this macro as being exported.
+
+#ifndef __HID_CLI_H__
+#define __HID_CLI_H__
+
+#ifdef _WINDOWS_
+#include <windows.h>
+#else
+#include <stdlib.h>
+#endif
+
+#ifdef _WINDOWS_
+
 #ifdef HIDCLI_EXPORTS
 #define HIDCLI_API __declspec(dllexport)
 #else
 #define HIDCLI_API __declspec(dllimport)
 #endif
 
-#ifdef  __cplusplus
+#else
+#define HIDCLI_API
+#endif
+
+#if defined(__cplusplus) || defined(c_plusplus)
 extern "C" {
 #endif
 
-HIDCLI_API void* hid_device_open(short vid, short pid);
-HIDCLI_API int hid_device_close(void* fd);
-HIDCLI_API int hid_device_write(void* fd, void *b, size_t count);
+typedef long int hid_dev_t;
 
-#ifdef  __cplusplus
-}
+HIDCLI_API hid_dev_t hid_device_open(short vid, short pid);
+HIDCLI_API int hid_device_close(hid_dev_t handle);
+HIDCLI_API int hid_device_write(hid_dev_t handle, void *b, size_t count);
+
+#if defined(__cplusplus) || defined(c_plusplus)
+} /* extern "C" */
 #endif
+
+#endif /* __HID_CLI_H__ */

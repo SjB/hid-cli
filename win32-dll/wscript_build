@@ -5,8 +5,8 @@
 APPNAME="hid-cli"
 
 srcs = [
-    'dllmain.cpp',
-    'stdafx.cpp',
+#   'dllmain.cpp',
+#    'stdafx.cpp',
     'hid-cli.cpp']
 
 bld.read_stlib('hid', paths=['/usr/i586-mingw32msvc/lib']);
@@ -27,8 +27,9 @@ bld.shlib(
     target = 'hid-cli',
     vnum = bld.env.Version,
     defines = DEFINES,
+    dflags = ['-g'],
     includes = [
-    '.',
+    '../include',
     '/usr/i586-mingw32msvc/include',
     '/usr/i586-mingw32msvc/include/ddk'],
     use = 'setupapi hid')

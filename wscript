@@ -3,7 +3,7 @@
 # Steve Beaulac, 2013 (SjB)
 
 import os
-from waflib import Options
+from waflib import Options, Utils
 
 MAJOR = 0
 MINOR = 1
@@ -26,41 +26,43 @@ def options(ctx):
                 default=False,
                 help='Enable debug build')
 
-	ctx.add_option('--build_win32',
-					dest='Win32Platform',
+	ctx.add_option('--crosscompile-win32',
+					dest='crosscompile_win32',
 					action='store_true',
 					default=False,
-					help='build for win32 platform')
+					help='crosscompile win32 code')
 
 def configure(ctx):
 	ctx.load('cs_extra', tooldir='waftools')
 
 	ctx.env.VERSION = VERSION
-	ctx.env.Win32Build = Options.options.Win32Platform
+	ctx.env.build_win32 = False
 
-	if ctx.env.Win32Build:
+	ctx.env.build_win32 = ('win32' == Utils.unversioned_sys_platform())
+
+	if Options.options.crosscompile_win32 and not ctx.env.build_win32:
 		platform = 'i586-mingw32msvc-{0}'
 		os.environ['CC'] = platform.format('cc')
 		os.environ['CXX'] = platform.format('c++')
+		ctx.env.build_win32 = True;
 
 	ctx.load('compiler_c compiler_cxx')
 	ctx.check_tool('c cxx')
 
 	if Options.options.debug:
-		ctx.env.CCFLAGS = ['-DDEBUG', '-ggdb3', '-Wall']
+		ctx.env.CXXFLAGS = ctx.env.CFLAGS = ['-DDEBUG', '-g', '-Wall']
 	else:
-		ctx.env.CCFLAGS = ['-O2']
+		ctx.env.CXXFLAGS = ctx.env.CFLAGS = ['-O2']
 
 	ctx.env.default_app_install_path = '${PREFIX}/lib/%s' % APPNAME
 
 def build(bld):
 	projects = ['SjB.Hid', 'Test']
 
-	if bld.env.Win32Build:
+	if bld.env.build_win32:
 		projects.append('win32-dll')
 	else:
 		projects.append('src')
-
 
 	bld.recurse(projects)
 

@@ -8,6 +8,17 @@ srcs = ['hid_cli_test.cs']
 
 uselib = ['SjB.Hid']
 
+DEFINES = []
+if bld.env.build_win32:
+    DEFINES.extends([
+        'STRICT=1',
+        'WINVER=0x0400',
+        '__GNUWIN32__',
+        '__WIN95__',
+        'HAVE_W32API_H',
+        '_WXMSW_',
+        '_WINDOWS_'])
+
 bld(
     features = 'cs cs_dev',
     source = srcs,
@@ -16,3 +27,21 @@ bld(
     type = 'exe',
     use = uselib
 )
+
+bld.shlib(
+    source = 'testdll.cpp',
+    target = 'Testdll',
+    vnum = bld.env.Version,
+    defines = DEFINES,
+    includes = [
+        '.',
+        '/usr/i585-mingw32msvc/include'])
+
+#if bld.env.Win32Build:
+bld.program(
+    source = 'hid_dll_test.cpp',
+    includes = ['.', '../include'],
+    defines = DEFINES,
+    dflags = ['-g'],
+    target = "HidDllTest",
+    use = 'hid-cli')
