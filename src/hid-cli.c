@@ -20,11 +20,13 @@
 // permissions and limitations under the licenses.
 //
 
+#include <hid-cli.h>
+
+#include <stdlib.h>
 #include <unistd.h>
 #include <errno.h>
 #include <limits.h>
 #include <linux/hidraw.h>
-#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/ioctl.h>
@@ -38,12 +40,12 @@
 	({while (0) {}; })
 #endif
 
-static int match_hidraw(int fd, short vid, short pid)
+static int match_hidraw(hid_dev_t hid_dev, short vid, short pid)
 {
 	struct hidraw_devinfo dinfo;
 	int ret;
 
-	if (0 != ioctl(fd, HIDIOCGRAWINFO, &dinfo)) {
+	if (0 != ioctl(hid_dev, HIDIOCGRAWINFO, &dinfo)) {
 		dbg("Can't open RAWINFO");
 		return -EINVAL;
 	}
@@ -89,7 +91,7 @@ static int find_hidraw_device(short vid, short pid, char *hidraw_path)
 	return -1;
 }
 
-int hid_device_open(short vid, short pid)
+hid_dev_t hid_device_open(short vid, short pid)
 {
 	int fd;
 	char dev_path[PATH_MAX];
@@ -103,25 +105,27 @@ int hid_device_open(short vid, short pid)
 	return -ENODEV;
 }
 
-int hid_device_close(int fd)
+int hid_device_close(hid_dev_t handle)
 {
-	return close(fd);
+	return close((int)handle);
 }
 
-int hid_device_write(int fd, void *b, size_t count)
+int hid_device_write(hid_dev_t handle, void *b, size_t count)
 {
 	unsigned char *mesg;
 	size_t mesg_cnt = 1 + count;
-	struct timespec req = {0, 32000};
+	struct timespec req = {tv_sec:0, tv_nsec: 32000};
 	int ret;
+	int bytes_written = 0;
 
 	mesg = (unsigned char *)malloc(mesg_cnt);
 	mesg[0] = 0x0;
 	memcpy(&(mesg[1]), b, count);
+	bytes_written = write((int)handle, mesg, mesg_cnt);
 
-	if ((count = write(fd, mesg, mesg_cnt)) == mesg_cnt) {
+	if (bytes_written == mesg_cnt) {
 		ret = nanosleep(&req, NULL);
-		return count;
 	}
-	return 0;
+	free(mesg);
+	return bytes_written - 1;
 }

@@ -5,4 +5,5 @@
 bld.shlib(
 	source = 'hid-cli.c',
 	target = 'hid-cli',
+	includes = ['../include'],
 	vnum = bld.env.Version)
