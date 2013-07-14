@@ -28,6 +28,7 @@ bld.shlib(
     vnum = bld.env.Version,
     defines = DEFINES,
     dflags = ['-g'],
+    install_path = bld.env.default_app_install_path,
     includes = [
     '../include',
     '/usr/i586-mingw32msvc/include',

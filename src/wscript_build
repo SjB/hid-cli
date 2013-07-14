@@ -6,4 +6,5 @@ bld.shlib(
 	source = 'hid-cli.c',
 	target = 'hid-cli',
 	includes = ['../include'],
+    install_path = bld.env.default_app_install_path,
 	vnum = bld.env.Version)

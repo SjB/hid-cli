@@ -10,7 +10,7 @@ MINOR = 1
 PATCH = 1
 
 VERSION="{0}.{1}.{2}".format(MAJOR, MINOR, PATCH)
-APPNAME="hid-cli"
+APPNAME="SjB.Hid"
 
 top = '.'
 out = 'build'
