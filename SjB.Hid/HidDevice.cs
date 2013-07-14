@@ -51,6 +51,8 @@ namespace SjB.Hid
 		public void Open()
 		{
 			hdev = HidCli.hid_device_open(VID, PID);
+			if (hdev.IsInvalid)
+				throw new InvalidOperationException("Can't open Cavra Attenuator.");
 		}
 
 		public void Close()
