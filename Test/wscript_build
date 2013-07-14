@@ -9,8 +9,9 @@ srcs = ['hid_cli_test.cs']
 uselib = ['SjB.Hid']
 
 DEFINES = []
+
 if bld.env.build_win32:
-    DEFINES.extends([
+    DEFINES.extend([
         'STRICT=1',
         'WINVER=0x0400',
         '__GNUWIN32__',
