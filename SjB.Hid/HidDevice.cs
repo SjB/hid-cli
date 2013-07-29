@@ -80,13 +80,13 @@ namespace SjB.Hid
 
 		private const string HID_CLI_DLL = "hid-cli.dll";
 
-		[DllImport(HID_CLI_DLL, SetLastError = true)]
+		[DllImport(HID_CLI_DLL, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SafeHidHandle hid_device_open(short vid, short pid);
 
-		[DllImport(HID_CLI_DLL, SetLastError = true)]
+		[DllImport(HID_CLI_DLL, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int hid_device_close([In] IntPtr hdev);
 
-		[DllImport(HID_CLI_DLL, SetLastError = true)]
+		[DllImport(HID_CLI_DLL, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int hid_device_write([In] SafeHidHandle hdev, [In] IntPtr buffer, int count);
 	}
 }
